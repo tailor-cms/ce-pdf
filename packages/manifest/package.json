@@ -1,5 +1,5 @@
 {
-  "name": "tce-manifest",
+  "name": "@tailor-cms/ce-pdf-manifest",
   "description": "Tailor CMS PDF element",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
@@ -42,5 +42,8 @@
     "minify": false,
     "clean": false,
     "dts": true
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

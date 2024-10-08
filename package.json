@@ -1,6 +1,7 @@
 {
-  "name": "ce-pdf",
+  "name": "@tailor-cms/ce-pdf",
   "description": "Tailor CMS PDF element",
+  "private": true,
   "version": "0.0.1",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",

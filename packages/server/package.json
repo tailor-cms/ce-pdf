@@ -1,5 +1,5 @@
 {
-  "name": "tce-server",
+  "name": "@tailor-cms/ce-pdf-server",
   "description": "Tailor CMS PDF element",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
@@ -22,9 +22,9 @@
     "lint:fix": "pnpm lint --fix"
   },
   "devDependencies": {
+    "@tailor-cms/ce-pdf-manifest": "workspace:*",
     "@tailor-cms/cek-common": "^0.0.3",
     "@tailor-cms/eslint-config": "0.0.2",
-    "tce-manifest": "workspace:*",
     "tsup": "^7.2.0",
     "typescript": "^5.1.6"
   },
@@ -44,5 +44,8 @@
     "minify": false,
     "clean": false,
     "dts": true
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
