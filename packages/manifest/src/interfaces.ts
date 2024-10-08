@@ -1,6 +1,5 @@
-// Example counter component
 export interface ElementData {
-  count: number;
+  url: string | null;
 }
 
 export interface Element {
