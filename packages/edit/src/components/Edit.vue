@@ -21,7 +21,7 @@
       </VOverlay>
       <iframe
         :src="element.data.url"
-        class="w-100"
+        class="d-block w-100"
         frameborder="0"
         height="360"
         title="PDF Viewer"

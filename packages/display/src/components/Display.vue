@@ -1,5 +1,5 @@
 <template>
-  <div class="tce-root">
+  <div v-if="data.url" class="tce-root">
     <iframe
       :src="data.url"
       class="w-100"
