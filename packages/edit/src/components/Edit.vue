@@ -21,6 +21,7 @@
       </VOverlay>
       <iframe
         :src="element.data.url"
+        class="w-100"
         frameborder="0"
         height="360"
         title="PDF Viewer"
@@ -41,5 +42,6 @@ defineProps<{ element: Element; isFocused: boolean; isDisabled: boolean }>();
 <style lang="scss" scoped>
 .tce-pdf {
   text-align: left;
+  position: relative;
 }
 </style>
