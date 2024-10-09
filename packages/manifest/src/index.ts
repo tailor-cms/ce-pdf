@@ -12,7 +12,7 @@ export const name = 'PDF';
 
 // Function which inits element state (data property on the Content Element
 // entity)
-export const initState: DataInitializer = (): ElementData => ({ url: null });
+export const initState: DataInitializer = (): ElementData => ({});
 
 // Can be loaded from package.json
 export const version = '1.0';

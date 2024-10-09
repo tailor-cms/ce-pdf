@@ -1,42 +1,33 @@
 <template>
-  <div class="tce-container">
-    <div>This is Edit version of the content element id: {{ element?.id }}</div>
-    <div class="mt-6 mb-2">
-      Counter:
-      <span class="font-weight-bold">{{ element.data.count }}</span>
-    </div>
-    <button @click="increment">Increment</button>
+  <div class="tce-pdf">
+    <VSheet
+      v-if="!element.data.url"
+      class="d-flex justify-center align-center my-2 text-h6"
+      height="15.5rem"
+    >
+      <VIcon :icon="manifest.ui.icon" start />
+      {{ manifest.name }} placeholder
+    </VSheet>
+    <iframe
+      v-else
+      :src="element.data.url"
+      class="w-100"
+      height="360"
+      title="PDF Viewer"
+    ></iframe>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { defineEmits, defineProps } from 'vue';
-import { Element } from '@tailor-cms/ce-pdf-manifest';
+import manifest, { Element } from '@tailor-cms/ce-pdf-manifest';
 
-const emit = defineEmits(['save']);
-const props = defineProps<{ element: Element; isFocused: boolean }>();
-
-const increment = () => {
-  const { data } = props.element;
-  const count = data.count + 1;
-  emit('save', { ...data, count });
-};
+defineEmits(['save']);
+defineProps<{ element: Element; isFocused: boolean }>();
 </script>
 
-<style scoped>
-.tce-container {
-  background-color: transparent;
-  margin-top: 1rem;
-  padding: 1.5rem;
-  border: 2px dashed #888;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
-}
-
-button {
-  margin: 1rem 0 0 0;
-  padding: 0.25rem 1rem;
-  background-color: #eee;
-  border: 1px solid #444;
+<style lang="scss" scoped>
+.tce-image {
+  text-align: left;
 }
 </style>

@@ -1,5 +1,5 @@
 export interface ElementData {
-  url: string | null;
+  url?: string;
 }
 
 export interface Element {
