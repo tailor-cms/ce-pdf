@@ -8,26 +8,38 @@
       <VIcon :icon="manifest.ui.icon" start />
       {{ manifest.name }} placeholder
     </VSheet>
-    <iframe
-      v-else
-      :src="element.data.url"
-      class="w-100"
-      height="360"
-      title="PDF Viewer"
-    ></iframe>
+    <template v-else>
+      <VOverlay
+        :model-value="!isFocused && !isDisabled"
+        class="align-center justify-center"
+        opacity="0.9"
+        scrim="primary-darken-4"
+        close-on-content-click
+        contained
+      >
+        <button class="text-white text-h6 px-2">Click to preview</button>
+      </VOverlay>
+      <iframe
+        :src="element.data.url"
+        frameborder="0"
+        height="360"
+        title="PDF Viewer"
+      ></iframe>
+    </template>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { defineEmits, defineProps } from 'vue';
-import manifest, { Element } from '@tailor-cms/ce-pdf-manifest';
+import type { Element } from '@tailor-cms/ce-pdf-manifest';
+import manifest from '@tailor-cms/ce-embed-manifest';
 
 defineEmits(['save']);
 defineProps<{ element: Element; isFocused: boolean }>();
 </script>
 
 <style lang="scss" scoped>
-.tce-image {
+.tce-pdf {
   text-align: left;
 }
 </style>
