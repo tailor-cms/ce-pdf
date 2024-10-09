@@ -32,10 +32,10 @@
 <script lang="ts" setup>
 import { defineEmits, defineProps } from 'vue';
 import type { Element } from '@tailor-cms/ce-pdf-manifest';
-import manifest from '@tailor-cms/ce-embed-manifest';
+import manifest from '@tailor-cms/ce-pdf-manifest';
 
 defineEmits(['save']);
-defineProps<{ element: Element; isFocused: boolean }>();
+defineProps<{ element: Element; isFocused: boolean; isDisabled: boolean }>();
 </script>
 
 <style lang="scss" scoped>
