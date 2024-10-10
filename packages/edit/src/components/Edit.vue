@@ -8,26 +8,14 @@
       <VIcon :icon="manifest.ui.icon" start />
       {{ manifest.name }} placeholder
     </VSheet>
-    <template v-else>
-      <VOverlay
-        :model-value="!isFocused && !isDisabled"
-        class="align-center justify-center"
-        opacity="0.9"
-        scrim="primary-darken-4"
-        z-index="99"
-        close-on-content-click
-        contained
-      >
-        <button class="text-white text-h6 px-2">Click to preview</button>
-      </VOverlay>
-      <iframe
-        :src="element.data.url"
-        class="d-block w-100"
-        frameborder="0"
-        height="360"
-        title="PDF Viewer"
-      ></iframe>
-    </template>
+    <iframe
+      v-else
+      :src="element.data.url"
+      class="d-block w-100"
+      frameborder="0"
+      height="360"
+      title="PDF Viewer"
+    ></iframe>
   </div>
 </template>
 
@@ -43,6 +31,5 @@ defineProps<{ element: Element; isFocused: boolean; isDisabled: boolean }>();
 <style lang="scss" scoped>
 .tce-pdf {
   text-align: left;
-  position: relative;
 }
 </style>
