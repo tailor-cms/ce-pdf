@@ -14,6 +14,7 @@
         class="align-center justify-center"
         opacity="0.9"
         scrim="primary-darken-4"
+        z-index="99"
         close-on-content-click
         contained
       >
