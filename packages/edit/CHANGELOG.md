@@ -1,5 +1,11 @@
 # @tailor-cms/ce-pdf-edit
 
+## 0.0.4
+
+### Patch Changes
+
+- Overlay z-index updated not to clash with toolabr
+
 ## 0.0.3
 
 ### Patch Changes
