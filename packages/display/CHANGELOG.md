@@ -1,5 +1,11 @@
 # @tailor-cms/ce-pdf-display
 
+## 0.0.5
+
+### Patch Changes
+
+- Preview overlay has been causing issues on the authoring so it has been removed.
+
 ## 0.0.4
 
 ### Patch Changes
