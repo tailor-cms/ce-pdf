@@ -1,6 +1,6 @@
 {
   "name": "@tailor-cms/ce-pdf-manifest",
-  "description": "Tailor CMS PDF element",
+  "description": "Tailor CMS PDF element manifest",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
   "version": "0.0.5",

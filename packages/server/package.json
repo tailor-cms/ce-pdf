@@ -1,6 +1,6 @@
 {
   "name": "@tailor-cms/ce-pdf-server",
-  "description": "Tailor CMS PDF element",
+  "description": "Tailor CMS PDF element server component",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
   "version": "0.0.5",
