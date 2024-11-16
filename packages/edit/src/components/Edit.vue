@@ -1,13 +1,14 @@
 <template>
   <div class="tce-pdf">
-    <VSheet
+    <ElementPlaceholder
       v-if="!element.data.url"
-      class="d-flex justify-center align-center my-2 text-h6"
-      height="15.5rem"
-    >
-      <VIcon :icon="manifest.ui.icon" start />
-      {{ manifest.name }} placeholder
-    </VSheet>
+      :icon="manifest.ui.icon"
+      :is-disabled="isDisabled"
+      :is-focused="isFocused"
+      :name="`${manifest.name} component`"
+      active-icon="mdi-arrow-up"
+      active-placeholder="toolbar to upload the pdf"
+    />
     <iframe
       v-else
       :src="element.data.url"
@@ -22,6 +23,7 @@
 <script lang="ts" setup>
 import { defineEmits, defineProps } from 'vue';
 import type { Element } from '@tailor-cms/ce-pdf-manifest';
+import { ElementPlaceholder } from '@tailor-cms/core-components';
 import manifest from '@tailor-cms/ce-pdf-manifest';
 
 defineEmits(['save']);

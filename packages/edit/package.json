@@ -1,5 +1,7 @@
 {
   "name": "@tailor-cms/ce-pdf-edit",
+  "description": "Tailor CMS PDF element authoring component",
+  "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
   "version": "0.0.5",
   "exports": {
@@ -32,10 +34,9 @@
   },
   "dependencies": {
     "@tailor-cms/cek-common": "^0.0.3",
+    "@tailor-cms/core-components": "^1.0.11",
     "lodash": "^4.17.21"
   },
-  "description": "Tailor CMS PDF element",
-  "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "publishConfig": {
     "access": "public"
   }
