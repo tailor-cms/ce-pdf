@@ -1,5 +1,11 @@
 # @tailor-cms/ce-pdf-display
 
+## 0.0.6
+
+### Patch Changes
+
+- Core Components package has been utilized.
+
 ## 0.0.5
 
 ### Patch Changes
