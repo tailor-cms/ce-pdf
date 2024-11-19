@@ -12,7 +12,10 @@ export const name = 'PDF';
 
 // Function which inits element state (data property on the Content Element
 // entity)
-export const initState: DataInitializer = (): ElementData => ({});
+export const initState: DataInitializer = (): ElementData => ({
+  url: null,
+  assets: {},
+});
 
 // Can be loaded from package.json
 export const version = '1.0';
@@ -26,10 +29,6 @@ const ui = {
   forceFullWidth: true,
 };
 
-export const mocks = {
-  displayContexts: [{ name: 'No selection', data: {} }],
-};
-
 const manifest: ElementManifest = {
   type,
   version: '1.0',
@@ -37,7 +36,6 @@ const manifest: ElementManifest = {
   ssr: false,
   initState,
   ui,
-  mocks,
 };
 
 export default manifest;
