@@ -1,5 +1,11 @@
 # @tailor-cms/ce-pdf-display
 
+## 0.0.7
+
+### Patch Changes
+
+- Remove prefix from element type.
+
 ## 0.0.6
 
 ### Patch Changes
