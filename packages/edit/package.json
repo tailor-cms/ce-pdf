@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@tailor-cms/cek-common": "^0.0.3",
-    "@tailor-cms/core-components": "^1.0.12",
+    "@tailor-cms/core-components": "^1.0.26",
     "lodash": "^4.17.21"
   },
   "publishConfig": {
