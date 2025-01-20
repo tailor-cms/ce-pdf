@@ -3,7 +3,7 @@
   "description": "Tailor CMS PDF element authoring component",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -21,6 +21,7 @@
     "lint:fix": "pnpm lint --fix"
   },
   "peerDependencies": {
+    "@tailor-cms/core-components": "^1.0.26",
     "vue": "^3.3.4"
   },
   "devDependencies": {
@@ -34,7 +35,6 @@
   },
   "dependencies": {
     "@tailor-cms/cek-common": "^0.0.3",
-    "@tailor-cms/core-components": "^1.0.12",
     "lodash": "^4.17.21"
   },
   "publishConfig": {
