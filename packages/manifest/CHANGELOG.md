@@ -1,5 +1,11 @@
 # @tailor-cms/ce-pdf-manifest
 
+## 0.0.8
+
+### Patch Changes
+
+- Revert externalizing core-components.
+
 ## 0.0.7
 
 ### Patch Changes
