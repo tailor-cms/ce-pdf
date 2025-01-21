@@ -21,7 +21,7 @@ export default defineConfig({
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ['@tailor-cms/core-components', 'vue'],
+      external: ['vue'],
       output: {
         intro: 'import "./style.css";',
         // Provide global variables to use in the UMD build
