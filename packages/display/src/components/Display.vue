@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data.url" class="tce-root">
+  <div v-if="data.url" class="tce-pdf-root">
     <iframe
       :src="data.url"
       class="w-100"
@@ -18,10 +18,3 @@ const emit = defineEmits(['interaction']);
 
 const submit = () => emit('interaction', { id: props.id });
 </script>
-
-<style scoped>
-.tce-root {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
-}
-</style>
