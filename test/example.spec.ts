@@ -1,31 +1,29 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { pom } from '@tailor-cms/cek-e2e';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
+  await page.waitForLoadState('networkidle');
 });
 
-// test('Renders Edit component', async ({ page }) => {
-//   const editFrame = page.frameLocator('#editPanel')
-//   await expect(editFrame.getByText('Edit preview')).toBeVisible();
-//   const EDIT_COPY = 'Edit version of the content element';
-//   await expect(editFrame.getByText(EDIT_COPY)).toBeVisible();
-//   const TOP_TOOLBAR_COPY = 'Edit element top toolbar';
-//   await expect(editFrame.getByText(TOP_TOOLBAR_COPY)).toBeVisible();
-//   const SIDE_TOOLBAR_COPY = 'Edit element side toolbar';
-//   await expect(editFrame.getByText(SIDE_TOOLBAR_COPY)).toBeVisible();
-// });
+test('Renders Edit component', async ({ page }) => {
+  const editPanel = new pom.EditPanel(page);
+  await editPanel.persistFocus();
+  await expect(editPanel.editor).toBeVisible();
+  await expect(editPanel.topToolbar).toBeVisible();
+});
 
-// test('Renders Display component', async ({ page }) => {
-//   const displayFrame = page.frameLocator('#displayPanel')
-//   await expect(displayFrame.getByText('Display preview')).toBeVisible();
-//   const DISPLAY_COPY = 'This is the display version of the content element';
-//   await expect(displayFrame.getByText(DISPLAY_COPY)).toBeVisible();
-// });
+test('Renders Display component', async ({ page }) => {
+  const displayPanel = new pom.DisplayPanel(page);
+  await expect(displayPanel.editor).toBeVisible();
+});
 
-// test('Renders server state panel', async ({ page }) => {
-//   const properties = ['uid', 'type', 'meta', 'data', 'contentId'];
-//   const bottomPanel = page.locator('#panelBottom');
-//   for (const prop of properties) {
-//     await expect(bottomPanel.getByText(prop)).toBeVisible();
-//   }
-// });
+test('Renders server state panel', async ({ page }) => {
+  const bottomPanel = new pom.BottomPanel(page);
+  await expect(bottomPanel.el).toBeVisible();
+  await bottomPanel.authoringTab.click();
+  const properties = ['uid', 'type', 'meta', 'data', 'contentId'];
+  for (const prop of properties) {
+    await expect(bottomPanel.authoringWindow.getByText(prop)).toBeVisible();
+  }
+});
