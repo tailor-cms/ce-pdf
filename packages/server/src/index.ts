@@ -8,38 +8,38 @@ const IS_CEK = process.env.CEK_RUNTIME;
 const USER_STATE: any = {};
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-export function beforeSave(element: Element, services: HookServices) {
+export function beforeSave(element: Element, _services: HookServices) {
   return element;
 }
 
-export function afterSave(element: Element, services: HookServices) {
+export function afterSave(element: Element, _services: HookServices) {
   return element;
 }
 
 export function afterLoaded(
   element: Element,
-  services: HookServices,
-  runtime: ServerRuntime,
+  _services: HookServices,
+  _runtime: ServerRuntime,
 ) {
   return element;
 }
 
 export function afterRetrieve(
   element: Element,
-  services: HookServices,
-  runtime: ServerRuntime,
+  _services: HookServices,
+  _runtime: ServerRuntime,
 ) {
   return element;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function beforeDisplay(element: Element, context: any) {
+export function beforeDisplay(_element: Element, context: any) {
   return { ...context, ...USER_STATE };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function onUserInteraction(
-  element: Element,
+  _element: Element,
   context: any,
   payload: any,
 ): any {
