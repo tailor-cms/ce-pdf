@@ -1,7 +1,7 @@
 <template>
-  <div v-if="data.url" class="tce-root">
+  <div v-if="element.data.url" class="tce-pdf-root">
     <iframe
-      :src="data.url"
+      :src="element.data.url"
       class="w-100"
       height="360"
       title="PDF Viewer"
@@ -11,17 +11,15 @@
 </template>
 
 <script setup lang="ts">
-import { ElementData } from '@tailor-cms/ce-pdf-manifest';
+import { Element } from '@tailor-cms/ce-pdf-manifest';
 
-const props = defineProps<{ id: number; data: ElementData; userState: any }>();
+const props = defineProps<{ element: Element; userState: any }>();
 const emit = defineEmits(['interaction']);
 
-const submit = () => emit('interaction', { id: props.id });
+const submit = () => emit('interaction', { id: props.element.id });
 </script>
 
 <style scoped>
-.tce-root {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
+.tce-pdf-root {
 }
 </style>

@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { AssetInput } from '@tailor-cms/core-components';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from 'lodash-es';
 import type { Element } from '@tailor-cms/ce-pdf-manifest';
 
 const props = defineProps<{ element: Element }>();
