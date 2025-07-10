@@ -18,3 +18,8 @@ const emit = defineEmits(['interaction']);
 
 const submit = () => emit('interaction', { id: props.element.id });
 </script>
+
+<style scoped>
+.tce-pdf-root {
+}
+</style>
