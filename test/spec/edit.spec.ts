@@ -92,7 +92,3 @@ test.describe('Readonly mode', () => {
     await expect(edit.viewer).toBeVisible();
   });
 });
-
-test.afterAll(async () => {
-  await elementClient.reset(ELEMENT_ID);
-});
