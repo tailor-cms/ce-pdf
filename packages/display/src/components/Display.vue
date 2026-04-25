@@ -5,18 +5,14 @@
       class="w-100"
       height="360"
       title="PDF Viewer"
-      @load="submit"
     ></iframe>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Element } from '@tailor-cms/ce-pdf-manifest';
+import type { Element } from '@tailor-cms/ce-pdf-manifest';
 
-const props = defineProps<{ element: Element; userState: any }>();
-const emit = defineEmits(['interaction']);
-
-const submit = () => emit('interaction', { id: props.element.id });
+defineProps<{ element: Element }>();
 </script>
 
 <style scoped>
