@@ -6,8 +6,8 @@
       class="mx-auto"
       allow-url-source
       @delete="onDelete"
-      @input="onInput"
-      @upload="onUpload"
+      @input="save"
+      @upload="save"
     />
   </div>
 </template>
@@ -20,14 +20,9 @@ const EXTENSIONS = ['.pdf'];
 const props = defineProps<{ element: Element }>();
 const emit = defineEmits<{ save: [data: ElementData] }>();
 
-const onUpload = ({ url, publicUrl }: Record<string, any>) => {
+const save = ({ url, publicUrl }: Record<string, any>) => {
   const assets = { url };
   emit('save', { ...props.element.data, url: publicUrl, assets });
-};
-
-const onInput = (payload: Record<string, any> | null) => {
-  if (!payload) return;
-  emit('save', { ...props.element.data, url: payload.publicUrl });
 };
 
 const onDelete = () => {
