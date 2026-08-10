@@ -2,6 +2,13 @@
   "name": "@tailor-cms/ce-pdf-display",
   "description": "Tailor CMS PDF element end-user component",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailor-cms/ce-pdf.git",
+    "directory": "packages/display"
+  },
+  "homepage": "https://github.com/tailor-cms/ce-pdf#readme",
+  "bugs": "https://github.com/tailor-cms/ce-pdf/issues",
   "type": "module",
   "version": "2.0.3",
   "exports": {
