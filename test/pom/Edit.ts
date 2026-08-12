@@ -14,8 +14,4 @@ export class Edit extends pom.EditPanel {
     this.viewerFrame = this.editor.frameLocator('iframe[title="PDF Viewer"]');
     this.fileInput = new pom.FileInput(this.el);
   }
-
-  async focus() {
-    await this.editor.click({ position: { x: 0, y: 0 } });
-  }
 }
