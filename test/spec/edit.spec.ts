@@ -14,49 +14,37 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('When PDF is not set', () => {
-  test('Shows placeholder', async ({ page }) => {
+  test('Shows dropzone as empty state', async ({ page }) => {
     const edit = new Edit(page);
-    await expect(edit.placeholder).toBeVisible();
+    await expect(edit.fileInput.dropzone).toBeVisible();
+    await expect(edit.placeholder).not.toBeVisible();
     await expect(edit.viewer).not.toBeVisible();
   });
 
   test('Can import PDF via URL', async ({ page }) => {
     const edit = new Edit(page);
     await edit.focus();
-    await edit.fileInput.open();
+    await edit.fileInput.openUrlFromDropzone();
     await edit.fileInput.importUrl(PDF_URL);
     await expect(edit.viewer).toBeVisible();
     await expect(edit.viewer).toHaveAttribute('src', PDF_URL);
   });
 
-  test('Can upload PDF file', async ({ page }) => {
+  test('Can upload PDF file via dropzone', async ({ page }) => {
     const edit = new Edit(page);
     await edit.focus();
-    await edit.fileInput.open();
-    await edit.fileInput.upload(PDF);
+    await edit.fileInput.dropzoneUpload(PDF);
     await expect(edit.viewer).toBeVisible();
-    await expect(edit.fileInput.removeBtn).toBeVisible();
+    await expect(edit.fileInput.dropzone).not.toBeVisible();
+    await edit.fileInput.expectFile('test.pdf');
   });
 
   test('Rejects non-PDF file', async ({ page }) => {
     const edit = new Edit(page);
     await edit.focus();
-    await edit.fileInput.open();
-    await edit.fileInput.upload(DOCUMENT);
-    await edit.fileInput.cancel();
-    await expect(edit.placeholder).toBeVisible();
+    await edit.fileInput.dropzoneUpload(DOCUMENT);
+    await expect(edit.fileInput.dropzone).toBeVisible();
     await expect(edit.viewer).not.toBeVisible();
-  });
-
-  test('Returns to empty state after upload and delete', async ({ page }) => {
-    const edit = new Edit(page);
-    await edit.focus();
-    await edit.fileInput.open();
-    await edit.fileInput.upload(PDF);
-    await expect(edit.viewer).toBeVisible();
-    await edit.fileInput.remove();
-    await expect(edit.viewer).not.toBeVisible();
-    await expect(edit.placeholder).toBeVisible();
   });
 });
 
@@ -71,24 +59,33 @@ test.describe('When PDF is set', () => {
     await expect(edit.viewer).toBeVisible();
     await expect(edit.viewer).toHaveAttribute('src', PDF_URL);
   });
+
+  test('Can remove PDF', async ({ page }) => {
+    const edit = new Edit(page);
+    await edit.focus();
+    await edit.fileInput.removeFromRow();
+    await expect(edit.viewer).not.toBeVisible();
+    await expect(edit.fileInput.dropzone).toBeVisible();
+  });
 });
 
 test.describe('Readonly mode', () => {
-  test('Hides upload prompt when empty', async ({ page }) => {
+  test('Shows placeholder instead of dropzone when empty', async ({ page }) => {
     const edit = new Edit(page);
     await edit.setReadonly();
-    await edit.focus();
     await expect(edit.placeholder).toBeVisible();
-    await expect(
-      edit.el.getByText('Use toolbar to upload the PDF'),
-    ).not.toBeVisible();
+    await expect(edit.fileInput.dropzone).not.toBeVisible();
   });
 
-  test('Keeps viewer visible when set', async ({ page }) => {
+  test('Keeps viewer visible and hides file actions when set', async ({
+    page,
+  }) => {
     await elementClient.update(ELEMENT_ID, { url: PDF_URL, assets: {} });
     await page.reload({ waitUntil: 'networkidle' });
     const edit = new Edit(page);
     await edit.setReadonly();
+    await edit.focus();
     await expect(edit.viewer).toBeVisible();
+    await expect(edit.fileInput.replaceBtn).not.toBeVisible();
   });
 });
