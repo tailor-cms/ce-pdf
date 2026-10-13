@@ -10,10 +10,12 @@
       v-else
       :allowed-extensions="EXTENSIONS"
       :file-key="element.data.assets?.url || element.data.url"
+      :icon="manifest.ui.icon"
       :public-url="element.data.url"
       :readonly="isReadonly"
       :show-actions="isFocused"
       mode="dropzone"
+      title="Add a PDF"
       allow-url-source
       @delete="onDelete"
       @input="save"

@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@tailor-cms/ce-pdf-manifest": "workspace:*",
-    "@tailor-cms/eslint-config": "3.0.0",
+    "@tailor-cms/eslint-config": "3.0.1",
     "@vitejs/plugin-vue": "^6.0.10",
     "typescript": "^6.0.3",
     "vite": "^8.3.4",
@@ -42,7 +42,7 @@
     "vuetify": "^4.2.4"
   },
   "dependencies": {
-    "@tailor-cms/cek-common": "3.0.0"
+    "@tailor-cms/cek-common": "3.0.1"
   },
   "publishConfig": {
     "access": "public"
