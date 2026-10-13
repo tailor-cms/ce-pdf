@@ -1,5 +1,11 @@
 # @tailor-cms/ce-pdf-edit
 
+## 3.0.1
+
+### Patch Changes
+
+- Show the element icon and an "Add a PDF" title in the upload dropzone.
+
 ## 3.0.0
 
 ### Major Changes
