@@ -1,0 +1,33 @@
+{
+  "name": "@tailor-cms/ce-pdf-viewer",
+  "description": "pdf.js based PDF viewer shared by the PDF element edit and display packages",
+  "private": true,
+  "type": "module",
+  "version": "3.0.0",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit",
+    "lint": "eslint ./src",
+    "lint:fix": "pnpm lint --fix",
+    "nuke": "pnpm dlx del-cli node_modules"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^6.4.299"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.43"
+  },
+  "devDependencies": {
+    "@tailor-cms/eslint-config": "3.0.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.4",
+    "vue": "^3.5.43",
+    "vue-tsc": "^3.3.13",
+    "vuetify": "^4.2.4"
+  },
+  "engines": {
+    "node": ">=26"
+  }
+}
