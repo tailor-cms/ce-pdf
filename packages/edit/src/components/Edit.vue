@@ -21,13 +21,12 @@
       @input="save"
       @upload="save"
     >
-      <iframe
-        :src="element.data.url ?? ''"
-        class="d-block w-100"
-        frameborder="0"
-        height="360"
-        title="PDF Viewer"
-      ></iframe>
+      <PdfViewer
+        v-if="element.data.url"
+        :allow-download="element.data.allowDownload !== false"
+        :height="element.data.height"
+        :url="element.data.url"
+      />
     </TailorFileInput>
   </div>
 </template>
@@ -35,6 +34,7 @@
 <script lang="ts" setup>
 import type { Element, ElementData } from '@tailor-cms/ce-pdf-manifest';
 import manifest from '@tailor-cms/ce-pdf-manifest';
+import { PdfViewer } from '@tailor-cms/ce-pdf-viewer';
 
 const EXTENSIONS = ['.pdf'];
 

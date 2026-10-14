@@ -15,6 +15,8 @@ export const name = 'PDF';
 export const initState: DataInitializer = (): ElementData => ({
   url: null,
   assets: {},
+  allowDownload: true,
+  height: null,
 });
 
 // Can be loaded from package.json

@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@tailor-cms/ce-pdf-manifest": "workspace:*",
+    "@tailor-cms/ce-pdf-viewer": "workspace:*",
     "@tailor-cms/eslint-config": "3.0.1",
     "@vitejs/plugin-vue": "^6.0.10",
     "typescript": "^6.0.3",
