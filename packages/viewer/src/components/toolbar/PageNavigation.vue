@@ -5,7 +5,6 @@
       :disabled="disabled || currentPage <= 1"
       aria-label="Previous page"
       icon="mdi-chevron-up"
-      size="24"
       @click="emit('go-to', currentPage - 1)"
     />
     <VBtn
@@ -13,7 +12,6 @@
       :disabled="disabled || currentPage >= pageCount"
       aria-label="Next page"
       icon="mdi-chevron-down"
-      size="24"
       @click="emit('go-to', currentPage + 1)"
     />
     <div class="d-flex align-center ga-2 ml-1 text-body-medium">

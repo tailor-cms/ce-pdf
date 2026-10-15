@@ -10,7 +10,6 @@
       placeholder="Search in document"
       prepend-inner-icon="mdi-magnify"
       variant="solo-filled"
-      clearable
       flat
       hide-details
       single-line
@@ -28,14 +27,12 @@
       :disabled="!query"
       aria-label="Previous match"
       icon="mdi-chevron-up"
-      size="24"
       @click="emit('next', true)"
     />
     <VBtn
       :disabled="!query"
       aria-label="Next match"
       icon="mdi-chevron-down"
-      size="24"
       @click="emit('next', false)"
     />
     <VBtn aria-label="Close search" icon="mdi-close" @click="emit('close')" />
@@ -59,22 +56,29 @@ const emit = defineEmits<{
 const query = defineModel<string>({ required: true });
 const input = useTemplateRef<InstanceType<typeof VTextField>>('input');
 
+// While searching, pdf.js reports the previous counts, or none yet on the
+// first search; only say "No matches" once it has actually found none
 const status = computed(() => {
   if (!query.value || !props.result) return '';
   const { status, current, total } = props.result;
-  if (status === 'pending') return '…';
-  if (status === 'not-found' || !total) return 'No matches';
+  if (!total) return status === 'not-found' ? 'No matches' : '';
   return `${current} / ${total}`;
 });
 
-// Clearing the field sets it to null. The model only reflects the new
-// value once the parent re-renders, so search with the incoming value.
-const onInput = (value: string | null) => {
-  query.value = value ?? '';
-  emit('search', value ?? '');
+// The model only reflects the new value once the parent re-renders, so
+// search with the incoming value
+const onInput = (value: string) => {
+  query.value = value;
+  emit('search', value);
 };
 
-defineExpose({ focus: () => input.value?.focus() });
+// Selects the current query so typing replaces it
+const focus = () => {
+  input.value?.focus();
+  input.value?.$el.querySelector('input')?.select();
+};
+
+defineExpose({ focus });
 </script>
 
 <style scoped>

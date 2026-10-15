@@ -5,7 +5,6 @@
       :disabled="disabled"
       aria-label="Zoom out"
       icon="mdi-minus"
-      size="24"
       @click="emit('zoom-out')"
     />
     <VMenu :attach="attach" location="bottom">
@@ -15,7 +14,7 @@
           :aria-label="`Zoom level ${label}`"
           :disabled="disabled"
           class="tce-pdf-zoom-btn text-body-medium text-none px-1"
-          height="28"
+          height="30"
           min-width="50"
           rounded="lg"
           size="default"
@@ -40,7 +39,6 @@
       :disabled="disabled"
       aria-label="Zoom in"
       icon="mdi-plus"
-      size="24"
       @click="emit('zoom-in')"
     />
   </div>
