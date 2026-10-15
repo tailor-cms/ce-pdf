@@ -14,6 +14,7 @@
     "nuke": "pnpm dlx del-cli node_modules"
   },
   "dependencies": {
+    "@vueuse/core": "^14.4.0",
     "pdfjs-dist": "^6.4.299"
   },
   "peerDependencies": {

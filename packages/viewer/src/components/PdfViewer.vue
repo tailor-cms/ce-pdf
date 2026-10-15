@@ -119,12 +119,17 @@ import {
   useTemplateRef,
   watch,
 } from 'vue';
+import {
+  onClickOutside,
+  useElementSize,
+  useEventListener,
+  useFullscreen,
+} from '@vueuse/core';
 
 import type { FindResult, PdfViewerHandle, ZoomValue } from '../lib/pdfViewer';
 import DocumentActions from './toolbar/DocumentActions.vue';
 import PageNavigation from './toolbar/PageNavigation.vue';
 import SearchBar from './toolbar/SearchBar.vue';
-import { useFullscreen } from '../composables/useFullscreen';
 import ZoomControls from './toolbar/ZoomControls.vue';
 
 export interface PageChangeEvent {
@@ -162,7 +167,11 @@ const {
   isFullscreen,
   isSupported: isFullscreenSupported,
   toggle: toggleFullscreen,
-} = useFullscreen(root);
+} = useFullscreen(root, { autoExit: true });
+
+// Starts wide, so the full toolbar renders until the viewer is measured
+const { width } = useElementSize(root, { width: COMPACT_WIDTH, height: 0 });
+const isCompact = computed(() => width.value < COMPACT_WIDTH);
 
 // pdf.js objects rely on private class fields; keep them out of Vue's
 // reactivity system (proxies break private field access)
@@ -177,7 +186,6 @@ const pageCount = ref(0);
 const scale = ref(1);
 const scalePreset = ref<string | undefined>();
 const findResult = ref<FindResult | null>(null);
-const isCompact = ref(false);
 const isSearchOpen = ref(false);
 const searchQuery = ref('');
 
@@ -227,6 +235,44 @@ const toggleSearch = async () => {
   find('');
   container.value?.focus();
 };
+
+const openSearch = async () => {
+  if (!isSearchOpen.value) return toggleSearch();
+  searchBar.value?.focus();
+};
+
+// pdf.js text layers are focusable (clicking the document focuses one) and
+// are hidden while pages re-render, e.g. on zoom, which drops focus to the
+// body. Move it back so the viewer's shortcuts keep working, unless the user
+// has moved on: focused or clicked something outside the viewer.
+let hasFocus = false;
+
+useEventListener(document, 'focusin', (e) => {
+  hasFocus = !!root.value?.contains(e.target as Node);
+});
+
+onClickOutside(root, () => (hasFocus = false));
+
+const restoreFocus = () => {
+  if (!hasFocus || document.activeElement !== document.body) return;
+  container.value?.focus({ preventScroll: true });
+};
+
+// Viewer shortcuts, delegated so they work wherever focus is within the viewer
+useEventListener(root, 'keydown', (e) => {
+  if (!isReady.value || !(e.ctrlKey || e.metaKey) || e.altKey) return;
+  const actions: Record<string, () => unknown> = {
+    '=': zoomIn,
+    '+': zoomIn,
+    '-': zoomOut,
+    '0': () => setZoom('page-width'),
+    f: openSearch,
+  };
+  const action = actions[e.key.toLowerCase()];
+  if (!action) return;
+  e.preventDefault();
+  action();
+});
 
 const saveViaLink = (url: string) => {
   const link = document.createElement('a');
@@ -282,8 +328,10 @@ const initViewer = async () => {
       onScaleChange: (value, preset) => {
         scale.value = value;
         scalePreset.value = preset;
+        requestAnimationFrame(restoreFocus);
       },
       onFindResult: (result) => (findResult.value = result),
+      onTextLayerRender: restoreFocus,
     });
     if (controller.signal.aborted) return;
     handle = viewer;
@@ -301,19 +349,8 @@ const initViewer = async () => {
 
 watch(() => props.url, initViewer);
 
-const resizeObserver = new ResizeObserver(([entry]) => {
-  if (entry) isCompact.value = entry.contentRect.width < COMPACT_WIDTH;
-});
-
-onMounted(() => {
-  if (root.value) resizeObserver.observe(root.value);
-  initViewer();
-});
-
-onBeforeUnmount(() => {
-  resizeObserver.disconnect();
-  destroyViewer();
-});
+onMounted(initViewer);
+onBeforeUnmount(destroyViewer);
 </script>
 
 <style scoped>
@@ -329,6 +366,8 @@ onBeforeUnmount(() => {
 
 .tce-pdf-container {
   outline: none;
+  /* Pinch zooms the document (see lib/zoomGestures), not the page */
+  touch-action: pan-x pan-y;
 }
 
 .tce-pdf-container .pdfViewer {
