@@ -122,12 +122,15 @@ const toFindStatus = (state?: number): FindResult['status'] => {
   return 'found';
 };
 
-// Like browser find: only scroll when the match isn't visible, centering it
+// Like browser find: only scroll when the match isn't visible, centering it.
+// The container's `scroll-padding-bottom` is covered by the viewer controls.
 const centerIfHidden = (element: HTMLElement, container: HTMLElement) => {
   const view = container.getBoundingClientRect();
   const match = element.getBoundingClientRect();
+  const { scrollPaddingBottom } = getComputedStyle(container);
+  const visibleBottom = view.bottom - (parseFloat(scrollPaddingBottom) || 0);
   const isHiddenX = match.left < view.left || match.right > view.right;
-  const isHiddenY = match.top < view.top || match.bottom > view.bottom;
+  const isHiddenY = match.top < view.top || match.bottom > visibleBottom;
   container.scrollBy({
     left: isHiddenX
       ? (match.left + match.right - view.left - view.right) / 2
@@ -202,7 +205,7 @@ export async function createPdfViewer(
   bindZoomGestures(container, viewer, abortController.signal);
 
   // Keep preset zoom levels (e.g. fit width) in sync with container size
-  // changes (window resize, fullscreen toggle...)
+  // changes (window resize...)
   const resizeObserver = new ResizeObserver(() => {
     const value = viewer.currentScaleValue;
     if (!viewer.pdfDocument || !SCALE_PRESETS.includes(value)) return;

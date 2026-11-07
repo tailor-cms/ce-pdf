@@ -7,7 +7,7 @@
       icon="mdi-minus"
       @click="emit('zoom-out')"
     />
-    <VMenu :attach="attach" location="bottom">
+    <VMenu location="top" offset="16">
       <template #activator="{ props: menuProps }">
         <VBtn
           v-bind="menuProps"
@@ -70,8 +70,6 @@ const props = defineProps<{
   disabled: boolean;
   // Narrow viewers keep only the zoom level menu
   compact?: boolean;
-  // Menu attach target, needed while the viewer is fullscreen
-  attach?: HTMLElement;
 }>();
 const emit = defineEmits<{
   'zoom-in': [];

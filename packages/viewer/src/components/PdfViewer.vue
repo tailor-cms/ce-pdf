@@ -1,84 +1,16 @@
 <template>
   <div
     ref="root"
-    :class="isFullscreen ? 'w-100 h-100' : 'border rounded'"
-    class="tce-pdf-viewer d-flex flex-column overflow-hidden bg-surface text-left"
+    class="tce-pdf-viewer position-relative d-flex flex-column overflow-hidden bg-surface text-left border rounded"
   >
-    <VDefaultsProvider :defaults="TOOLBAR_DEFAULTS">
-      <VToolbar
-        :extended="isSearchOpen"
-        class="border-b"
-        color="surface"
-        density="compact"
-        extension-height="52"
-        tag="div"
-        flat
-      >
-        <!-- Wide viewers center the zoom controls; narrow ones keep the
-        controls packed to the left so the row still fits -->
-        <div
-          :class="isCompact ? 'd-flex' : 'tce-pdf-toolbar-grid'"
-          class="align-center w-100 px-3"
-        >
-          <PageNavigation
-            :compact="isCompact"
-            :current-page="currentPage"
-            :disabled="!isReady"
-            :page-count="pageCount"
-            @go-to="goToPage"
-          />
-          <VDivider
-            v-if="isCompact"
-            :length="20"
-            class="mx-2 align-self-center"
-            vertical
-          />
-          <ZoomControls
-            :attach="overlayTarget"
-            :compact="isCompact"
-            :disabled="!isReady"
-            :scale="scale"
-            :scale-preset="scalePreset"
-            @zoom="setZoom"
-            @zoom-in="zoomIn"
-            @zoom-out="zoomOut"
-          />
-          <VSpacer v-if="isCompact" />
-          <DocumentActions
-            :allow-download="allowDownload"
-            :attach="overlayTarget"
-            :compact="isCompact"
-            :disabled="!isReady"
-            :is-fullscreen="isFullscreen"
-            :is-fullscreen-supported="isFullscreenSupported"
-            :is-search-open="isSearchOpen"
-            :url="url"
-            @download="download"
-            @toggle-fullscreen="toggleFullscreen"
-            @toggle-search="toggleSearch"
-          />
-        </div>
-        <template #extension>
-          <SearchBar
-            ref="searchBar"
-            v-model="searchQuery"
-            :result="findResult"
-            class="w-100 px-3 pt-1 pb-2"
-            @close="toggleSearch"
-            @next="findNext"
-            @search="find"
-          />
-        </template>
-      </VToolbar>
-    </VDefaultsProvider>
     <div
-      :class="isFullscreen ? 'flex-1-1' : 'flex-0-0'"
       :style="viewportStyle"
-      class="position-relative bg-surface-light"
+      class="flex-0-0 position-relative bg-surface-light"
     >
       <!-- pdf.js requires an absolutely positioned scroll container -->
       <div
         ref="container"
+        :class="{ 'tce-pdf-container--search': isSearchOpen }"
         class="tce-pdf-container position-absolute top-0 left-0 w-100 h-100 overflow-auto"
         tabindex="0"
       >
@@ -106,6 +38,64 @@
         </template>
       </div>
     </div>
+    <VDefaultsProvider :defaults="TOOLBAR_DEFAULTS">
+      <div class="tce-pdf-dock ga-2">
+        <VSlideYReverseTransition>
+          <VSheet
+            v-if="isSearchOpen"
+            class="tce-pdf-pill tce-pdf-search-pill pa-2"
+            color="transparent"
+            rounded="pill"
+            border
+          >
+            <SearchBar
+              ref="searchBar"
+              v-model="searchQuery"
+              :result="findResult"
+              @close="toggleSearch"
+              @next="findNext"
+              @search="find"
+            />
+          </VSheet>
+        </VSlideYReverseTransition>
+        <VSheet
+          aria-label="PDF controls"
+          class="tce-pdf-pill tce-pdf-controls-pill d-flex align-center pa-2"
+          color="transparent"
+          role="toolbar"
+          rounded="pill"
+          border
+        >
+          <PageNavigation
+            :compact="isCompact"
+            :current-page="currentPage"
+            :disabled="!isReady"
+            :page-count="pageCount"
+            @go-to="goToPage"
+          />
+          <VDivider :length="20" class="mx-2 align-self-center" vertical />
+          <ZoomControls
+            :compact="isCompact"
+            :disabled="!isReady"
+            :scale="scale"
+            :scale-preset="scalePreset"
+            @zoom="setZoom"
+            @zoom-in="zoomIn"
+            @zoom-out="zoomOut"
+          />
+          <VDivider :length="20" class="mx-2 align-self-center" vertical />
+          <DocumentActions
+            :allow-download="allowDownload"
+            :compact="isCompact"
+            :disabled="!isReady"
+            :is-search-open="isSearchOpen"
+            :url="url"
+            @download="download"
+            @toggle-search="toggleSearch"
+          />
+        </VSheet>
+      </div>
+    </VDefaultsProvider>
   </div>
 </template>
 
@@ -119,12 +109,7 @@ import {
   useTemplateRef,
   watch,
 } from 'vue';
-import {
-  onClickOutside,
-  useElementSize,
-  useEventListener,
-  useFullscreen,
-} from '@vueuse/core';
+import { onClickOutside, useElementSize, useEventListener } from '@vueuse/core';
 
 import type { FindResult, PdfViewerHandle, ZoomValue } from '../lib/pdfViewer';
 import DocumentActions from './toolbar/DocumentActions.vue';
@@ -137,12 +122,12 @@ export interface PageChangeEvent {
   pageCount: number;
 }
 
-// Viewer width below which the toolbar drops zoom steps and moves secondary
+// Viewer width below which the pill drops zoom steps and moves secondary
 // actions to an overflow menu, so it fits on one row
-const COMPACT_WIDTH = 480;
+const COMPACT_WIDTH = 520;
 
 const TOOLBAR_DEFAULTS = {
-  VBtn: { size: 32 },
+  VBtn: { size: 32, variant: 'text' },
   VIcon: { size: 20 },
 };
 
@@ -162,12 +147,6 @@ const emit = defineEmits<{ 'page-change': [data: PageChangeEvent] }>();
 const root = useTemplateRef<HTMLDivElement>('root');
 const container = useTemplateRef<HTMLDivElement>('container');
 const searchBar = useTemplateRef<InstanceType<typeof SearchBar>>('searchBar');
-
-const {
-  isFullscreen,
-  isSupported: isFullscreenSupported,
-  toggle: toggleFullscreen,
-} = useFullscreen(root, { autoExit: true });
 
 // Starts wide, so the full toolbar renders until the viewer is measured
 const { width } = useElementSize(root, { width: COMPACT_WIDTH, height: 0 });
@@ -190,16 +169,9 @@ const isSearchOpen = ref(false);
 const searchQuery = ref('');
 
 const viewportStyle = computed(() => {
-  if (isFullscreen.value) return { minHeight: 0 };
   if (props.height) return { height: `${props.height}px` };
   return { height: '70vh', minHeight: '400px' };
 });
-
-// Render menus inside the viewer while in fullscreen, otherwise they would
-// be teleported outside of the fullscreen element and not be visible
-const overlayTarget = computed(() =>
-  isFullscreen.value && root.value ? root.value : undefined,
-);
 
 const setCurrentPage = (pageNumber: number) => {
   currentPage.value = pageNumber;
@@ -354,24 +326,56 @@ onBeforeUnmount(destroyViewer);
 </script>
 
 <style scoped>
-/* Page navigation | zoom (centered) | actions */
-.tce-pdf-toolbar-grid {
+/* Floats over the document without blocking it, except for the pills */
+.tce-pdf-dock {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 1rem;
+  left: 0.75rem;
+  z-index: 10;
+  /* Search pill takes the width of the controls, with enough room to type */
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(min(20rem, 100%), max-content);
+  justify-content: center;
+  pointer-events: none;
 }
 
-.tce-pdf-toolbar-grid > :last-child {
-  justify-self: end;
+.tce-pdf-pill {
+  max-width: 100%;
+  pointer-events: auto;
+  background-color: rgba(var(--v-theme-surface), 0.72);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.tce-pdf-controls-pill {
+  justify-self: center;
+}
+
+.tce-pdf-search-pill:focus-within {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: -1px;
 }
 
 .tce-pdf-container {
+  /* Area covered by the pills; search scrolls matches out of it */
+  --tce-pdf-pills-clearance: 5rem;
+  scroll-padding-bottom: var(--tce-pdf-pills-clearance);
   outline: none;
   /* Pinch zooms the document (see lib/zoomGestures), not the page */
   touch-action: pan-x pan-y;
 }
 
+.tce-pdf-container--search {
+  --tce-pdf-pills-clearance: 8.5rem;
+}
+
+/* Bottom padding lets the end of the document scroll clear of the pills */
 .tce-pdf-container .pdfViewer {
-  padding: 0.5rem 0;
+  padding: 0.5rem 0 var(--tce-pdf-pills-clearance);
 }
 
 /*

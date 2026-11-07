@@ -91,8 +91,8 @@ defineExpose({ focus });
   --v-field-input-padding-bottom: 0px;
 }
 
-/* Solo fields only tint slightly on focus; add a clear focus ring */
-.tce-pdf-search :deep(.v-field--focused) {
-  outline: 2px solid rgb(var(--v-theme-primary));
+/* The surrounding pill is the visible input, including its focus state */
+.tce-pdf-search :deep(.v-field__overlay) {
+  display: none;
 }
 </style>

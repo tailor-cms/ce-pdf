@@ -8,12 +8,6 @@
       icon="mdi-magnify"
       @click="emit('toggle-search')"
     />
-    <VBtn
-      v-if="isFullscreenSupported && !compact"
-      :aria-label="isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'"
-      :icon="isFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
-      @click="emit('toggle-fullscreen')"
-    />
     <template v-if="!compact">
       <VBtn
         v-if="allowDownload"
@@ -30,7 +24,7 @@
       />
     </template>
     <!-- Narrow viewers move secondary actions into an overflow menu -->
-    <VMenu v-else :attach="attach" location="bottom end">
+    <VMenu v-else location="top end" offset="16">
       <template #activator="{ props: menuProps }">
         <VBtn
           v-bind="menuProps"
@@ -39,14 +33,6 @@
         />
       </template>
       <VList density="compact">
-        <VListItem
-          v-if="isFullscreenSupported"
-          :prepend-icon="
-            isFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'
-          "
-          :title="isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'"
-          @click="emit('toggle-fullscreen')"
-        />
         <VListItem
           v-if="allowDownload"
           prepend-icon="mdi-download"
@@ -72,14 +58,9 @@ defineProps<{
   disabled: boolean;
   compact: boolean;
   isSearchOpen: boolean;
-  isFullscreen: boolean;
-  isFullscreenSupported: boolean;
-  // Menu attach target, needed while the viewer is fullscreen
-  attach?: HTMLElement;
 }>();
 const emit = defineEmits<{
   'toggle-search': [];
-  'toggle-fullscreen': [];
   download: [];
 }>();
 </script>
